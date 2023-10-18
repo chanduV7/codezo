@@ -41,18 +41,20 @@ export default function DashBoard() {
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(RegisterUser(formData));
+    setModal(false)
   };
   const onHandleClick2 = () => {
     dispatch(getAllUsers());
-    setOnOff(!onOff)
+    setOnOff(true)
   };
   const onHandleClick3 = (e) => {
     e.preventDefault( )
-    dispatch(postData(formData1))
+    dispatch(postData(formData1));
+    
   }
   const onHandleClick4 = () => {
     dispatch(getAllJobs())
-    setOnOff(!onOff)
+    setOnOff(false)
   }
   const token = localStorage.getItem("token");
   const access = localStorage.getItem("access");
@@ -205,7 +207,7 @@ export default function DashBoard() {
               </FormGroup>
               <FormGroup row>
                 <Label for="exampleEmail" sm={2}>
-                  Email
+                  Username :
                 </Label>
                 <Col sm={10}>
                   <Input

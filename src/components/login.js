@@ -1,29 +1,32 @@
 import { FormGroup, Label, Input, Button } from "reactstrap";
 import { Form, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "../styles/register.css";
+import { LoginUser } from "../redux/slices/dataSlice";
 import { useEffect, useState } from "react";
 export default function Login() {
-  const [formData, setFormData] = useState({});
+  const [formData001, setFormData001] = useState({});
+  const loginUser = useSelector((state) => state.User.value.register);
+  const {token} = LoginUser
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleClick = (e) => {
+  const handleClick001 = (e) => {
     e.preventDefault();
-    console.log(dispatch(Login(formData)));
+    console.log(dispatch(LoginUser(formData001)));
   };
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    
     if(token){
         navigate("/");
     }
-  })
+  },[token])
   return (
     <div className="register-container">
       <div className="imagediv">
         <img src="https://codezo.s3.amazonaws.com/static/img/login-page1.jpg" />
       </div>
       <div className="formDiv">
-        <Form className=" border border-2 p-3" onSubmit={handleClick}>
+        <Form className=" border border-2 p-3" onSubmit={handleClick001}>
           <FormGroup>
             <Label for="exampleEmail" className="h4">
               Login Form
@@ -37,7 +40,7 @@ export default function Login() {
               placeholder="Email Address"
               type="email"
               onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
+                setFormData001({ ...formData001, email: e.target.value })
               }
             />
           </FormGroup>
@@ -51,7 +54,7 @@ export default function Login() {
               placeholder="password"
               type="password"
               onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
+                setFormData001({ ...formData001, password: e.target.value })
               }
             />
           </FormGroup>
@@ -59,7 +62,7 @@ export default function Login() {
 
           
           <FormGroup className="text-center">
-            <Button className="bg-success" onClick={handleClick}>
+            <Button className="bg-success" onClick={handleClick001}>
               Register
             </Button>
           </FormGroup>
