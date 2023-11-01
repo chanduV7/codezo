@@ -10,22 +10,34 @@ import DashBoard from './components/dashBoard';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './components/home';
 import Login from './components/login';
+import BuildProfile from './components/buildProfile';
+import ProfileForm from './components/profileForm';
 
 function App() {
    const router = createBrowserRouter([
    
     { 
-      path:"/",
+      path:"/home",
       element:<Home/>
     },
-
+    { 
+      path:"/profile=/:userId",
+      element:<BuildProfile/>,
+      // children : [
+      //   {
+      //     path : "/editDetails",
+      //     element : <ProfileForm/>
+      //   }
+      // ]
+    },
+   
     {
-      path :"accounts/login",
+      path :"/accounts/login",
       element:<Login/>
     },
 
     {
-      path :"accounts/register",
+      path :"/accounts/register",
       element:<Register/>
     },
 
@@ -34,7 +46,7 @@ function App() {
         element:<AdminLogin/>
       },
       {
-        path: "admin/dashboard",
+        path: "/admin/dashboard",
         element: <DashBoard/>
       }
    ])

@@ -6,18 +6,21 @@ import { LoginUser } from "../redux/slices/dataSlice";
 import { useEffect, useState } from "react";
 export default function Login() {
   const [formData001, setFormData001] = useState({});
-  const loginUser = useSelector((state) => state.User.value.register);
-  const {token} = LoginUser
+  const loginUser = useSelector((state) => state.User.value.login);
+  const {token} = loginUser;
+
+  // const token = localStorage.getItem("token");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleClick001 = (e) => {
     e.preventDefault();
-    console.log(dispatch(LoginUser(formData001)));
+    dispatch(LoginUser(formData001));
   };
   useEffect(() => {
     
     if(token){
-        navigate("/");
+      
+        navigate("/home");
     }
   },[token])
   return (
@@ -63,7 +66,7 @@ export default function Login() {
           
           <FormGroup className="text-center">
             <Button className="bg-success" onClick={handleClick001}>
-              Register
+             Login
             </Button>
           </FormGroup>
         </Form>

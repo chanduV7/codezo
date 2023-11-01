@@ -41,7 +41,9 @@ export default function DashBoard() {
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(RegisterUser(formData));
+    window.alert("success")
     setModal(false)
+    
   };
   const onHandleClick2 = () => {
     dispatch(getAllUsers());
@@ -50,7 +52,8 @@ export default function DashBoard() {
   const onHandleClick3 = (e) => {
     e.preventDefault( )
     dispatch(postData(formData1));
-    
+    window.alert("success")
+    setModal1(false);
   }
   const onHandleClick4 = () => {
     dispatch(getAllJobs())
@@ -65,7 +68,6 @@ export default function DashBoard() {
     
     } 
     
-  
   }, [token,access]);
 
   return (
@@ -133,7 +135,7 @@ export default function DashBoard() {
         </div>
           :
         <div style={{ width: "80%",display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"1rem",backgroundColor: "rgb(242,184,198)" }} className="ps-2">
-          {jobData.length &&
+          {jobData &&
             jobData.map((e) => {
               return (
                 <div className="">

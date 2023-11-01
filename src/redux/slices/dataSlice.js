@@ -10,7 +10,8 @@ const dataSlice = createSlice({
                 register : [],
                 login: [],
                 allUsers: [],
-                jobData: []
+                jobData: [],
+                userDetails: {}
              }
     },
 
@@ -62,6 +63,14 @@ const dataSlice = createSlice({
   builder.addCase(getAllUsers.rejected ,(state,action)=>{
       state.error = action.error;
   })
+  builder.addCase(getUser.fulfilled , (state,action)=>{
+      
+    state.value.userDetails = action.payload;
+})
+
+builder.addCase(getUser.rejected ,(state,action)=>{
+    state.error = action.error;
+})
   }
 })
 
@@ -92,6 +101,23 @@ export const LoginUser = createAsyncThunk("login",async(e) => {
 
 export const getAllUsers = createAsyncThunk("getAllUsers",async() => {
   const {data} = await axios.get(baseUrl + "/users/getAll")
+  return data;
+})
+
+
+export const getUser = createAsyncThunk("getUser",async({userId}) => {
+  console.log(userId);
+  const token = localStorage.getItem("token");
+  
+  const {data} = await axios.get(baseUrl + "/users/getUser/" + userId,
+  {
+      // params : {
+      // userId : userId
+      // },
+      headers: {
+        Authorization : "Bearer " + token 
+      }
+  })
   return data;
 })
 

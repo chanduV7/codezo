@@ -7,9 +7,17 @@ import { RegisterUser } from "../redux/slices/dataSlice";
 export default function Register() {
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
+  const date = new Date();
+  console.log(date);
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(dispatch(RegisterUser(formData)));
+    if(formData.password !== formData.confirmpassword) {
+    window.alert("Password and Confirm Password are not same");
+    }else{
+      dispatch(RegisterUser({...formData,timedate : date}));
+      window.alert("Successfully Registered");
+    }
+    
   };
   return (
     <div className="register-container">
