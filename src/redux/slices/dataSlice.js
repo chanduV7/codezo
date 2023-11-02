@@ -11,7 +11,8 @@ const dataSlice = createSlice({
                 login: [],
                 allUsers: [],
                 jobData: [],
-                userDetails: {}
+                userDetails: {},
+                update: {}
              }
     },
 
@@ -71,6 +72,14 @@ const dataSlice = createSlice({
 builder.addCase(getUser.rejected ,(state,action)=>{
     state.error = action.error;
 })
+builder.addCase(updateUser.fulfilled , (state,action)=>{
+      
+  state.value.update = action.payload;
+})
+
+builder.addCase(updateUser.rejected ,(state,action)=>{
+  state.error = action.error;
+})
   }
 })
 
@@ -106,18 +115,30 @@ export const getAllUsers = createAsyncThunk("getAllUsers",async() => {
 
 
 export const getUser = createAsyncThunk("getUser",async({userId}) => {
-  console.log(userId);
+  
   const token = localStorage.getItem("token");
   
   const {data} = await axios.get(baseUrl + "/users/getUser/" + userId,
   {
-      // params : {
-      // userId : userId
-      // },
+    
       headers: {
         Authorization : "Bearer " + token 
       }
   })
+  return data;
+})
+
+export const updateUser = createAsyncThunk("updateUser", async(arg) => {
+  console.log(arg);
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const {data} = await axios.patch(baseUrl + "/users/updateUser/" + userId,  arg,
+  // {
+    // headers: {
+    //   Authorization : "Bearer " + token 
+    // }
+  // }
+  )
   return data;
 })
 

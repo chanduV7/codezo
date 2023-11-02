@@ -146,7 +146,7 @@ const BuildProfile = () => {
             </div>
           </div>
           <div className="update">
-            <Link to={"/editDetails"}>    <button type="button">Update Details</button></Link>
+            <Link to={"/profile/edit/" + userId}>    <button type="button">Update Details</button></Link>
          
           </div>
         </div>

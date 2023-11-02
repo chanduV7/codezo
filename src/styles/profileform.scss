@@ -1,0 +1,22 @@
+.profile-details{
+       
+    display: grid;
+    gap: 1rem;
+    column-gap: 18rem;
+    grid-template-columns: repeat(2, 1fr);
+    padding-top: 2rem;
+    border-radius: 1%;
+  .no1{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   input{
+    width: 18rem;
+    height: 2.5rem;
+   }
+   textarea{
+    width: 18rem;
+    height: 6rem;
+   }
+  }
+}

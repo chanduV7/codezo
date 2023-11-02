@@ -23,14 +23,11 @@ function App() {
     { 
       path:"/profile=/:userId",
       element:<BuildProfile/>,
-      // children : [
-      //   {
-      //     path : "/editDetails",
-      //     element : <ProfileForm/>
-      //   }
-      // ]
     },
-   
+   {
+     path: "/profile/edit/:userId",
+     element: <ProfileForm/>
+   },
     {
       path :"/accounts/login",
       element:<Login/>
