@@ -12,7 +12,8 @@ const dataSlice = createSlice({
                 allUsers: [],
                 jobData: [],
                 userDetails: {},
-                update: {}
+                update: {},
+                upload : {}
              }
     },
 
@@ -80,6 +81,15 @@ builder.addCase(updateUser.fulfilled , (state,action)=>{
 builder.addCase(updateUser.rejected ,(state,action)=>{
   state.error = action.error;
 })
+
+builder.addCase(uploadImage.fulfilled , (state,action)=>{
+      
+  state.value.upload = action.payload;
+})
+
+builder.addCase(uploadImage.rejected ,(state,action)=>{
+  state.error = action.error;
+})
   }
 })
 
@@ -142,7 +152,11 @@ export const updateUser = createAsyncThunk("updateUser", async(arg) => {
   return data;
 })
 
-
+export const uploadImage  = createAsyncThunk("cloudinary", async(arg) => {
+  console.log(arg);
+  const {data} = await axios.post("https://api.cloudinary.com/v1_1/dzeek4uww/image/upload",arg) 
+  return data
+})
 
 
 

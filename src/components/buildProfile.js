@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import "../styles/buildmyprofile.scss";
 import { GoSearch } from "react-icons/go";
+import { MdModeEditOutline} from "react-icons/md";
 import { Link } from "react-router-dom";
 import "../styles/home.scss";
 import "../styles/buildmyprofile.scss";
@@ -60,6 +61,15 @@ const BuildProfile = () => {
      
       <div className="container profile-container">
         <h2>Profile</h2>
+        <div className="profile-pic-container">
+           <div className="profile-pic">
+            {
+              userDetails? <img className="profile-image" src={userDetails.profile_pic} alt="Img"/> :  <p className="h1" >{email && email.slice(0,2).toUpperCase()}</p>
+            }
+          
+            <MdModeEditOutline  className="edit-icon"/> 
+           </div>
+        </div>
         <div className="profile-div">
           <div className="profile-details">
             <div className="no1">

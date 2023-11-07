@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../styles/buildmyprofile.scss";
 import { GoSearch } from "react-icons/go";
+import { MdModeEditOutline} from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/home.scss";
-import "../styles/buildmyprofile.scss";
+import "../styles/profileform.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, updateUser } from "../redux/slices/dataSlice";
 
@@ -11,24 +12,30 @@ const BuildProfile = () => {
   const userId = localStorage.getItem("userId");
   const email = localStorage.getItem("email");
   const token = localStorage.getItem("token");
+  const date = new Date();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
+  const [open, setOpen ] = useState(false)
   console.log(formData);
   const handleClick = (e) => {
     e.preventDefault()
-      dispatch(updateUser(formData))
+      dispatch(updateUser({...formData, lastupdatetime : date}));
+      alert("Saved Successfully")
   }
+  const handleClick1 = () => {
+    setOpen(!open)
+}
   const userDetails = useSelector((state) => state.User.value.userDetails);
   console.log(userDetails);
   
   useEffect(() => {
     if(!token) navigate("/accounts/login")
     dispatch(getUser({ userId: userId }));
-    // dispatch(updateUser({userId : userId}))
-  }, []);
+    
+  }, [token]);
   return (
-    <div className="buldmyprofile-container  ">
+    <div className="buldmyprofile-container container-fluid ">
       <div className="home-container">
         <div className="line"></div>
         <div className="home-container-header">
@@ -63,14 +70,33 @@ const BuildProfile = () => {
           <div className="border rounded-pill p-2 border-success text-success">
             iFollow
           </div>
-          <div className="profile-name">
+          <div onClick={handleClick1} className="profile-name">
             <p>{email && email.slice(0, 2).toUpperCase()}</p>
           </div>
         </div>
       </div>
-     
+      <div  className= {` profile-dropdown ${open ? "display": "display-none"}`}>
+               <ul>
+                <li>My Profile</li>
+                <li>Saved Jobs</li>
+                <li>Applied Jobs</li>
+                <li onClick={() => {
+                    localStorage.clear();
+                    window.location.reload()
+                    }}>Log Out</li>
+               
+               </ul>
+           </div>
       <div className="container profile-container">
         <h2>Profile</h2>
+        <div className="profile-pic-container">
+           <div className="profile-pic">
+           {
+              userDetails? <img className="profile-image" src={userDetails.profile_pic} alt="Img"/> :  <p className="h1" >{email && email.slice(0,2).toUpperCase()}</p>
+            }
+            <MdModeEditOutline onClick={() => navigate("/profile/edit-pic")} className="edit-icon"/> 
+           </div>
+        </div>
         <div className="profile-div">
           <div className="profile-details">
             <div className="no1">

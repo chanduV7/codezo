@@ -12,6 +12,8 @@ import Home from './components/home';
 import Login from './components/login';
 import BuildProfile from './components/buildProfile';
 import ProfileForm from './components/profileForm';
+import UploadPic from './components/uploadPic';
+
 
 function App() {
    const router = createBrowserRouter([
@@ -45,6 +47,10 @@ function App() {
       {
         path: "/admin/dashboard",
         element: <DashBoard/>
+      },
+      {
+        path: "/profile/edit-pic",
+        element: <UploadPic/>
       }
    ])
   return (
