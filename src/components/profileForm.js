@@ -56,7 +56,7 @@ const BuildProfile = () => {
               <GoSearch className="" />
             </div>
           </div>
-          <div>Jobs</div>
+          <div style={{cursor: "pointer"}} onClick={() => navigate("/home")}>Jobs</div>
           <Link
             to={"/profile=/" + userId}
             style={{

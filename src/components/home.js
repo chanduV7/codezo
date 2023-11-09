@@ -34,7 +34,7 @@ export default function Home() {
                    </div>
                    <div className="h4 pt-1"><GoSearch className=""/></div>
                 </div>
-                <div>Jobs</div>
+                <div style={{cursor: "pointer"}} onClick={() => navigate("/home")}>Jobs</div>
                 <Link to={"/profile=/" + userId } style={{cursor:"pointer",textDecoration:"none",color:"black"}}>Build My Profile</Link>
                 <div className="border rounded-pill p-2 border-success text-success">iFollow</div>
                 <div onClick={handleClick} className="profile-name">

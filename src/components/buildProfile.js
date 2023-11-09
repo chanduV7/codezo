@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "../styles/buildmyprofile.scss";
 import { GoSearch } from "react-icons/go";
 import { MdModeEditOutline} from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "../styles/home.scss";
 import "../styles/buildmyprofile.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,7 @@ const BuildProfile = () => {
   const userDetails = useSelector((state) => state.User.value.userDetails);
   console.log(userDetails);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getUser({ userId: userId }));
   }, []);
@@ -39,7 +40,7 @@ const BuildProfile = () => {
               <GoSearch className="" />
             </div>
           </div>
-          <div>Jobs</div>
+          <div style={{cursor: "pointer"}} onClick={() => navigate("/home")}>Jobs</div>
           <Link
             to={"/profile=/" + userId}
             style={{

@@ -1,9 +1,9 @@
 import { Form, useNavigate } from "react-router-dom";
 import { FormGroup, Label, Input, Button } from "reactstrap";
-import "../styles/register.css";
+import "../../styles/register.css";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LoginUser } from "../redux/slices/dataSlice";
+import { LoginUser } from "../../redux/slices/dataSlice";
 export default function AdminLogin() {
   const [formData, setFormData] = useState({});
   const Login = useSelector((state) => state.User.value.login)

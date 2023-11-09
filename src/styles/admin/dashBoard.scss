@@ -1,0 +1,29 @@
+.dashboard-container{
+    width: 100%;
+    .dashboard-display-part{
+        display: flex;
+        width: 100%;
+       
+       .listings{
+        width: 19%;
+       }
+       .display-part{
+         display: grid;
+         grid-template-columns: repeat(4, 1fr);
+         column-gap: 0.5rem;
+         row-gap: 0.1rem;
+         .delete{
+            display: flex;
+            justify-content: end;
+            button{
+                border: none;
+            }
+         }
+       }
+      
+    }
+}
+
+.display-part-disable{
+    display: none;
+}

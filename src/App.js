@@ -3,8 +3,8 @@ import './App.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import Register from './components/register';
-import AdminLogin from './components/adminLogin';
-import DashBoard from './components/dashBoard';
+import AdminLogin from '../src/components/admin/adminLogin';
+import DashBoard from '../src/components/admin/dashBoard';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
