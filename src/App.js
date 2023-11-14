@@ -51,6 +51,10 @@ function App() {
       {
         path: "/profile/edit-pic",
         element: <UploadPic/>
+      },
+      {
+        path: "/viewJob/:jobId",
+        element: <UploadPic/>
       }
    ])
   return (

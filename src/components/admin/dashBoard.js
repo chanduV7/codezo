@@ -23,11 +23,13 @@ import {
 import "../../styles/admin/dashBoard.scss";
 import {
   RegisterUser,
+  deleteCompany,
   deleteJob,
   deleteUser,
   getAllCompanies,
   getAllJobs,
   getAllUsers,
+  postCompany,
   postData,
 } from "../../redux/slices/dataSlice";
 import { Link, useNavigate } from "react-router-dom";
@@ -35,20 +37,29 @@ export default function DashBoard() {
   const [modal, setModal] = useState(false);
   const [modal1, setModal1] = useState(false);
   const [modal2, setModal2] = useState(false);
-  const [open123, setOpen123] = useState({ open1 : true , open2 : false , open3 : false}) 
+  const [open123, setOpen123] = useState({
+    open1: true,
+    open2: false,
+    open3: false,
+  });
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [formData1, setFormData1] = useState({});
   const [formData2, setFormData2] = useState({});
+  const [compNames, setCompNames] = useState([]);
   const email = localStorage.getItem("email");
   const userId = localStorage.getItem("userId");
-  console.log(formData1);
   const allUsers = useSelector((state) => state.User.value.allUsers);
   const jobData = useSelector((state) => state.User.value.jobData);
   const companyData = useSelector((state) => state.User.value.companyData);
-  const toggle = () => setModal(!modal);
+
+  const toggle = () => {
+    setModal(!modal);
+    setModal1(false);
+    setModal2(false);
+  };
   const toggle1 = () => {
     setModal1(!modal1);
     setModal(false);
@@ -64,36 +75,47 @@ export default function DashBoard() {
     dispatch(RegisterUser(formData));
     window.alert("success");
     setModal(false);
+    window.location.reload();
   };
   const onHandleClick2 = () => {
-    dispatch(getAllUsers());
-    setOpen123({...open123,open1 : true,open2 : false, open3 : false})
+    // dispatch(getAllUsers());
+    setOpen123({ ...open123, open1: true, open2: false, open3: false });
   };
   const onHandleClick3 = (e) => {
     e.preventDefault();
     dispatch(postData(formData1));
     window.alert("success");
     setModal1(false);
+    window.location.reload();
   };
   const onHandleClick4 = () => {
-    
-    dispatch(getAllJobs());
-    setOpen123({...open123,open1 : false,open2 : true, open3 : false})
+    // dispatch(getAllJobs());
+    setOpen123({ ...open123, open1: false, open2: true, open3: false });
   };
   const onHandleClick9 = () => {
-    dispatch(getAllCompanies());
-    setOpen123({...open123,open1 : false,open2 : false, open3 : true})
+    // dispatch(getAllCompanies());
+    setOpen123({ ...open123, open1: false, open2: false, open3: true });
   };
   const handleClick5 = () => {
     setOpen(!open);
   };
-  const handleClick6 = () => {};
+  const handleClick6 = (e) => {
+    e.preventDefault();
+    dispatch(postCompany(formData2));
+    window.alert("success");
+    setModal2(false);
+  };
   const handleClick8 = (id) => {
     dispatch(deleteJob({ jobId: id }));
     window.location.reload();
+    // setOpen123({ ...open123, open1: false, open2: true, open3: false })
   };
   const handleClick7 = (id) => {
     dispatch(deleteUser({ userId: id }));
+    window.location.reload();
+  };
+  const handleClick10 = (id) => {
+    dispatch(deleteCompany({ cid: id }));
     window.location.reload();
   };
   const token = localStorage.getItem("token");
@@ -106,7 +128,11 @@ export default function DashBoard() {
       navigate("/admin/login");
     }
   }, [token, access]);
-
+console.log(compNames);
+console.log(formData1);
+  useEffect(() => {
+    setCompNames(companyData.map((e) => e.company_name + " " + e._id));
+  }, [companyData]);
   return (
     <div className="dashboard-container">
       <div className="home-container">
@@ -149,7 +175,7 @@ export default function DashBoard() {
         </div>
 
         <div
-          className={` profile-dropdown ${open ? "display" : "display-none"}`}
+         style={{zIndex:"100"}} className={` profile-dropdown ${open ? "display" : "display-none"}`}
         >
           <ul>
             <li onClick={() => navigate("/profile=/:userId")}>My Profile</li>
@@ -191,8 +217,10 @@ export default function DashBoard() {
 
         {/* display jobs and users and company */}
 
-        <div className={open123.open1 ? "display-part" : "display-part-disable"}>
-          {allUsers.length &&
+        <div
+          className={open123.open1 ? "display-part" : "display-part-disable"}
+        >
+          {allUsers &&
             allUsers.map((e) => {
               return (
                 <div className="">
@@ -211,11 +239,11 @@ export default function DashBoard() {
                       <CardTitle tag="h5">{e.username}</CardTitle>
                       <CardText>
                         <div>
-                          <Label>Email:</Label>
+                          <Label className="h6">Email:</Label>
                           {e.email}
                         </div>
                         <div>
-                          <Label>Access : </Label>
+                          <Label className="h6">Access : </Label>
                           {e.access}
                         </div>
                       </CardText>
@@ -226,14 +254,14 @@ export default function DashBoard() {
             })}
         </div>
 
-        <div className={open123.open2 ? "display-part" : "display-part-disable"}>
+        <div
+          className={open123.open2 ? "display-part" : "display-part-disable"}
+        >
           {jobData &&
             jobData.map((e) => {
               return (
                 <div className="">
-                  <Card
-                  
-                  >
+                  <Card>
                     <div className="delete">
                       {" "}
                       <button onClick={() => handleClick8(e._id)} type="button">
@@ -241,40 +269,40 @@ export default function DashBoard() {
                       </button>
                     </div>
                     <CardBody>
-                      <CardTitle tag="h5">{e.title}</CardTitle>
+                      <CardTitle  tag="h5">{e.title}</CardTitle>
                       <CardText>
                         <div>
-                          <Label className="" style={{ fontWeight: "500" }}>
-                            Company :
+                          <Label className="h6" style={{ fontWeight: "500" }}>
+                            Company Name :
                           </Label>
-                          {e.company}
+                          {e.company_name}
                         </div>
                         <div>
-                          <Label>Role</Label>
+                          <Label className="h6">Role</Label>
                           {e.role}
                         </div>
                         <div>
-                          <Label>State :</Label>
+                          <Label className="h6">State :</Label>
                           {e.States}
                         </div>
                         <div>
-                          <Label>Employment Type :</Label>
+                          <Label className="h6">Employment Type :</Label>
                           {e.employmenttype}
                         </div>
                         <div>
-                          <Label>Functional Area :</Label>
+                          <Label className="h6">Functional Area :</Label>
                           {e.functionalarea}
                         </div>
                         <div>
-                          <Label>Experience</Label>
+                          <Label className="h6">Experience : </Label>
                           {e.experience}
                         </div>
                         <div>
-                          <Label>Skills</Label>
+                          <Label className="h6">Skills :</Label>
                           {e.skills}
                         </div>
                         <div>
-                          <Label>Openings</Label>
+                          <Label className="h6">Openings :</Label>
                           {e.openings}
                         </div>
                       </CardText>
@@ -284,31 +312,33 @@ export default function DashBoard() {
               );
             })}
         </div>
-        <div className={open123.open3 ? "display-part" : "display-part-disable"}>
+        <div
+          className={open123.open3 ? "display-part" : "display-part-disable"}
+        >
           {companyData &&
             companyData.map((e) => {
               return (
-                <div className="display-part">
-                  <Card
-                  
-                  >
+                <div>
+                  <Card>
                     <div className="delete">
                       {" "}
-                      <button type="button">X</button>
+                      <button
+                        onClick={() => handleClick10(e._id)}
+                        type="button"
+                      >
+                        X
+                      </button>
                     </div>
                     <CardBody>
                       <CardText>
                         <div>
-                          <Label>Company Name :</Label>
-                          {e.companyname}
+                          <Label className="h6">Company Name :</Label>
+                          {e.company_name}
                         </div>
+                       
                         <div>
-                          <Label>About :</Label>
-                          <span>{e.about}</span>
-                        </div>
-                        <div>
-                          <Label>Job Postings</Label>
-                          <span>{e.jobs.length}</span>
+                          <Label className="h6">Job Postings :</Label>
+                          <span>{e.jobs ? e.jobs.length : "0"}</span>
                         </div>
                       </CardText>
                     </CardBody>
@@ -320,16 +350,16 @@ export default function DashBoard() {
       </div>
 
       {/* Add User */}
-      <div style={{ width: "100%" }}>
+      <div>
         <Modal isOpen={modal} toggle={toggle}>
           <ModalHeader toggle={toggle}>Add User</ModalHeader>
           <ModalBody>
-            <Form className="w-100" onSubmit={handleClick}>
+            <Form className="w-100" onSubmit={handleClick} sm={12}>
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
-                  Email
+                <Label for="exampleEmail" sm={3}>
+                  Email :
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="email"
@@ -342,10 +372,10 @@ export default function DashBoard() {
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleEmail" sm={3}>
                   Username :
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="username"
@@ -358,10 +388,10 @@ export default function DashBoard() {
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label for="examplePassword" sm={2}>
-                  Password
+                <Label for="examplePassword" sm={3}>
+                  Password :
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="examplePassword"
                     name="password"
@@ -374,10 +404,10 @@ export default function DashBoard() {
                 </Col>
               </FormGroup>
               <FormGroup row>
-                <Label for="exampleSelect" sm={2}>
-                  Access
+                <Label for="exampleSelect" sm={3}>
+                  Access :
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleSelect"
                     name="select"
@@ -416,10 +446,10 @@ export default function DashBoard() {
           <ModalBody>
             <Form className="w-100" onSubmit={onHandleClick3}>
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
-                  Title
+                <Label for="exampleEmail" sm={3}>
+                  Title :
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="title"
@@ -433,27 +463,34 @@ export default function DashBoard() {
               </FormGroup>
 
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleSelect" sm={3}>
                   Company Name
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
-                    id="exampleEmail"
-                    name="company"
-                    placeholder="Company Name"
-                    type="text"
-                    onChange={(e) =>
-                      setFormData1({ ...formData1, company: e.target.value })
-                    }
-                  />
+                    id="exampleSelect"
+                    name="select"
+                    type="select"
+                    onChange={(q) => setFormData1({ ...formData1, cid : q.target.value.split(" ")[1], company_name: q.target.value.split(" ")[0]})}
+                  >
+                    <option >select</option>
+                    {compNames &&
+                      compNames.map((i) => {
+                        return (
+                          <option value={i}>
+                            {i.split(" ")[0]}
+                          </option>
+                        );
+                      })}
+                  </Input>
                 </Col>
               </FormGroup>
 
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleEmail" sm={3}>
                   Role
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="role"
@@ -467,10 +504,10 @@ export default function DashBoard() {
               </FormGroup>
 
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleEmail" sm={3}>
                   Functional Area
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="functionalarea"
@@ -487,10 +524,10 @@ export default function DashBoard() {
               </FormGroup>
 
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleEmail" sm={3}>
                   States/Cities:
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="States/Cities: "
@@ -504,10 +541,10 @@ export default function DashBoard() {
               </FormGroup>
 
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleEmail" sm={3}>
                   Employment Type:
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="Employment Type: "
@@ -524,10 +561,10 @@ export default function DashBoard() {
               </FormGroup>
 
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleEmail" sm={3}>
                   Skills :
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="skills"
@@ -541,10 +578,10 @@ export default function DashBoard() {
               </FormGroup>
 
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleEmail" sm={3}>
                   Experience
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name=" Experience"
@@ -558,10 +595,10 @@ export default function DashBoard() {
               </FormGroup>
 
               <FormGroup row>
-                <Label for="exampleEmail" sm={2}>
+                <Label for="exampleEmail" sm={3}>
                   Openings
                 </Label>
-                <Col sm={10}>
+                <Col sm={9}>
                   <Input
                     id="exampleEmail"
                     name="openings"
@@ -569,6 +606,22 @@ export default function DashBoard() {
                     type="text"
                     onChange={(e) =>
                       setFormData1({ ...formData1, openings: e.target.value })
+                    }
+                  />
+                </Col>
+              </FormGroup>
+              <FormGroup row>
+                <Label for="exampleEmail" sm={3}>
+                  Salary :
+                </Label>
+                <Col sm={9}>
+                  <Input
+                    id="exampleEmail"
+                    name="openings"
+                    placeholder="Salary"
+                    type="text"
+                    onChange={(e) =>
+                      setFormData1({ ...formData1, salary: e.target.value })
                     }
                   />
                 </Col>
@@ -594,7 +647,7 @@ export default function DashBoard() {
 
       <div style={{ width: "100%" }}>
         <Modal isOpen={modal2} toggle={toggle2}>
-          <ModalHeader toggle={toggle}>Add User</ModalHeader>
+          <ModalHeader toggle={toggle2}>Add Company</ModalHeader>
           <ModalBody>
             <Form className="w-100" onSubmit={handleClick6}>
               <FormGroup row>

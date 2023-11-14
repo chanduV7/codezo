@@ -7,6 +7,7 @@ const dataSlice = createSlice({
   initialState: {
     value: {
       jobDetails: [],
+      companyDetails : [],
       register: [],
       login: [],
       allUsers: [],
@@ -14,6 +15,7 @@ const dataSlice = createSlice({
       companyData : [],
       deleteJob: [],
       deleteUser: [],
+      deleteCompany: [],
       userDetails: {},
       update: {},
       upload: {},
@@ -103,6 +105,20 @@ const dataSlice = createSlice({
     builder.addCase(getAllCompanies.rejected, (state, action) => {
       state.error = action.error;
     });
+    builder.addCase(deleteCompany.fulfilled, (state, action) => {
+      state.value.deleteCompany = action.payload;
+    });
+
+    builder.addCase(deleteCompany.rejected, (state, action) => {
+      state.error = action.error;
+    });
+    builder.addCase(postCompany.fulfilled, (state, action) => {
+      state.value.companyDetails = action.payload;
+    });
+
+    builder.addCase(postCompany.rejected, (state, action) => {
+      state.error = action.error;
+    });
   },
 });
 
@@ -181,8 +197,19 @@ export const deleteUser = createAsyncThunk("deleteUser", async ({ userId }) => {
   return data;
 });
 
+export const deleteCompany = createAsyncThunk("deleteCompany", async ({ cid }) => {
+  console.log(cid);
+  const token = localStorage.getItem("token");
+  const { data } = await axios.delete(baseUrl + "/company/delete/" + cid, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return data;
+});
+
 export const uploadImage = createAsyncThunk("cloudinary", async (arg) => {
-  console.log(arg);
+  
   const { data } = await axios.post(
     "https://api.cloudinary.com/v1_1/dzeek4uww/image/upload",
     arg
@@ -194,5 +221,15 @@ export const getAllCompanies = createAsyncThunk("getAllCompanies", async() => {
   const {data} = await axios.get(baseUrl + "/company/getall")
   return data
 })
+
+export const postCompany = createAsyncThunk("postCompany", async (arg) => {
+  const token = localStorage.getItem("token");
+  const { data } = await axios.post(baseUrl + "/company/add", arg, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  return data;
+});
 
 export default dataSlice.reducer;
