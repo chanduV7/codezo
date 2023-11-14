@@ -19,6 +19,7 @@ const dataSlice = createSlice({
       userDetails: {},
       update: {},
       upload: {},
+      getJobDetails : {}
     },
   },
 
@@ -117,6 +118,13 @@ const dataSlice = createSlice({
     });
 
     builder.addCase(postCompany.rejected, (state, action) => {
+      state.error = action.error;
+    });
+    builder.addCase(getJob.fulfilled, (state, action) => {
+      state.value.getJobDetails = action.payload;
+    });
+
+    builder.addCase(getJob.rejected, (state, action) => {
       state.error = action.error;
     });
   },
@@ -221,6 +229,12 @@ export const getAllCompanies = createAsyncThunk("getAllCompanies", async() => {
   const {data} = await axios.get(baseUrl + "/company/getall")
   return data
 })
+
+export const getJob = createAsyncThunk("getCompany", async({jobId}) => {
+  const {data} = await axios.get(baseUrl + "/jobs/get/" + jobId)
+  return data
+})
+
 
 export const postCompany = createAsyncThunk("postCompany", async (arg) => {
   const token = localStorage.getItem("token");

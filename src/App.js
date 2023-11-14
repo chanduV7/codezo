@@ -13,6 +13,7 @@ import Login from './components/login';
 import BuildProfile from './components/buildProfile';
 import ProfileForm from './components/profileForm';
 import UploadPic from './components/uploadPic';
+import ViewJob from './components/viewJob';
 
 
 function App() {
@@ -54,7 +55,7 @@ function App() {
       },
       {
         path: "/viewJob/:jobId",
-        element: <UploadPic/>
+        element:  <ViewJob/>
       }
    ])
   return (
